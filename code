@@ -1,0 +1,45 @@
+import speech_recognition as sr
+
+def listen_for_speech():
+    recognizer = sr.Recognizer()
+    
+    with sr.Microphone() as source:
+        print("Listening... Say something!")
+        recognizer.adjust_for_ambient_noise(source)
+        audio = recognizer.listen(source)
+    
+    try:
+        text = recognizer.recognize_google(audio)
+        return text
+    except sr.UnknownValueError:
+        print("Sorry, I couldn't understand what you said.")
+        return ""
+    except sr.RequestError:
+        print("Oops! The speech recognition service is currently unavailable.")
+        return ""
+
+def respond_to_text(text):
+    if "hello" in text.lower():
+        return "Hello! How can I assist you?"
+    elif "how are you" in text.lower():
+        return "I'm just a computer program, but I'm doing fine. Thank you for asking!"
+    elif "goodbye" in text.lower():
+        return "Goodbye! Have a great day!"
+    elif "what is your favourite place" in text.lower():
+        return "chennai!"
+    else:
+        return "I'm sorry, I'm not sure how to respond to that."
+
+if __name__ == "__main__":
+    print("Speech-to-Text Conversation (type 'exit' to end)")
+    while True:
+        user_input = listen_for_speech()
+        
+        if user_input.lower() == "exit":
+            print("Exiting...")
+            break
+
+        if user_input:
+            print("You:", user_input)
+            response = respond_to_text(user_input)
+            print("Bot:", response)
